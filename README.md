@@ -38,13 +38,15 @@ const d = result.toSvgPathDParameter()
 const svgLineAndArcElements = result.toSvgLineAndArcs()
 ```
 
-The result of this, rendering with SVG, looks something like this:
+The result of this looks as follows (rendering with SVG, `stroke-width=2` and `stroke=#ccc`):
 
 ![l-shape-example](./img/l-shape-example.png)
 
 ## Examples
 
-Corner Rounder uses [Exhibitor](https://github.com/samhuk/exhibitor) to demo itself with some example routes. To view these, clone the repository, run `npm i && npm run exh`, then navigate to http://localhost:4001.
+Corner Rounder uses [Exhibitor](https://github.com/samhuk/exhibitor) to demo itself with some example routes, modifiable stroke widths, colors, radii, etc.. To view these, clone the repository, run `npm i && npm run exh`, then navigate to http://localhost:4001.
+
+The examples are within `/src/test/`, which provide a comprehensive look into how Corner Rounder can be used.
 
 ## Development
 
