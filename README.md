@@ -35,10 +35,11 @@ const result = roundCorners({
 // E.g. "M 0 0 L 0 40 A 10 10 0 0 0 10 50 L 50 50"
 const d = result.toSvgPathDParameter()
 // E.g. (SVGLineElement | SVGPathElement)[]
-const svgLineAndArcElements = result.toSvgLineAndArcs()
+const svgLineAndArcElements = result.toSvgLineAndArcs({ color: 'orange', ... })
 ```
 
-The result of this looks as follows (rendering with SVG, `stroke-width=2` and `stroke=#ccc`):
+## Preview (SVG)
+The result of this looks as follows (`cornerArcRadius` = 10):
 
 ![l-shape-example](./img/l-shape-example.png)
 

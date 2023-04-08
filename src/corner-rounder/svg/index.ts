@@ -60,12 +60,15 @@ export const toSvgPathDParameter = (
   cornerArcRadius: number,
 ) => {
   const firstPos = pathSegments[0].line[0]
+  // Start the path at the beginning of the first line
   let d = `M ${firstPos[0]} ${firstPos[1]}`
   for (let i = 0; i < pathSegments.length; i += 1) {
     const pathSegment = pathSegments[i]
     const endOfThisLinePos = pathSegment.line[1]
+    // Line to the end of the current line
     d += ` L ${endOfThisLinePos[0]} ${endOfThisLinePos[1]}`
 
+    // Arc to the start of the next line
     if (pathSegment.arc != null) {
       const startOfNextLinePos = pathSegments[i + 1].line[0]
       d += ` A ${cornerArcRadius} ${cornerArcRadius} 0 0 ${pathSegment.arc.sweepFlag ? '1' : '0'} ${startOfNextLinePos[0]} ${startOfNextLinePos[1]}`
