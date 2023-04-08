@@ -1,0 +1,12 @@
+{
+  "$schema": "https://raw.githubusercontent.com/samhuk/exhibitor/master/src/common/config/schema.json",
+  "include": [
+    "./src/test/**/*.exh.ts",
+    "./src/test/**/*.exh.tsx"
+  ],
+  "watch": [
+    "./src/**/*",
+    "./src/test/**/*"
+  ],
+  "rootStyle": "src/test/index.scss"
+}

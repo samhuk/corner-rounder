@@ -23,22 +23,22 @@ Integration test configuration exists for this template. These are sometimes, bu
 
 ---
 
-<h1 align="center">{{package-name}}</h1>
+<h1 align="center">Corner Rounder</h1>
 <p align="center">
-  <em>{{package-slogan}}</em>
+  <em>Corner rounder with SVG integration</em>
 </p>
 
 > Badges like license type, current build status, and npm package version info can go here. Uncomment the HTML below within this README to show them.
 
 <!-- <p align="center">
-  <a href="https://github.com/{{github-user-name}}/{{package-name}}/actions/workflows/ci.yaml/badge.svg" target="_blank">
-    <img src="https://github.com/{{github-user-name}}/{{package-name}}/actions/workflows/ci.yaml/badge.svg" alt="ci status" />
+  <a href="https://github.com/samhuk/corner-rounder/actions/workflows/ci.yaml/badge.svg" target="_blank">
+    <img src="https://github.com/samhuk/corner-rounder/actions/workflows/ci.yaml/badge.svg" alt="ci status" />
   </a>
   <a href="https://img.shields.io/badge/License-MIT-green.svg" target="_blank">
     <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="license" />
   </a>
-  <a href="https://badge.fury.io/js/{{npm-package-name}}.svg" target="_blank">
-    <img src="https://badge.fury.io/js/{{npm-package-name}}.svg" alt="npm version" />
+  <a href="https://badge.fury.io/js/corner-rounder.svg" target="_blank">
+    <img src="https://badge.fury.io/js/corner-rounder.svg" alt="npm version" />
   </a>
 </p> -->
 

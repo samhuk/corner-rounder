@@ -11,6 +11,8 @@
 		"strict": true,
 		"isolatedModules": true,
     "esModuleInterop": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "jsx": "react",
+    "skipLibCheck": true
 	}
 }

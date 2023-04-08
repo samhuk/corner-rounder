@@ -5,4 +5,4 @@
  * E.g. `import { PackageNameOptions } from 'npm-package-name`
  */
 
-export type { PackageName, PackageNameOptions } from './package-name/types'
+export type { RoundCornersOptions, RoundCornersResult, Line, PathSegment, Position2D, Route } from './corner-rounder/types'
