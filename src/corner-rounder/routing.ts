@@ -92,7 +92,7 @@ const getIntermediatePathSegment = (
   }
 }
 
-export const determinePathSegments = (route: Route, edgeCurveRadius: number): PathSegment[] => {
+export const determinePathSegments = (route: Route, cornerArcRadius: number): PathSegment[] => {
   // Cannot have a route with less than 2 points
   if (route.length < 2)
     return []
@@ -109,7 +109,7 @@ export const determinePathSegments = (route: Route, edgeCurveRadius: number): Pa
   let pos0: Position2D = route[0]
 
   for (let i = 0; i < lenMinusTwo; i += 1) {
-    const { pathSegment, nextPos0 } = getIntermediatePathSegment(pos0, route[i + 1], route[i + 2], edgeCurveRadius)
+    const { pathSegment, nextPos0 } = getIntermediatePathSegment(pos0, route[i + 1], route[i + 2], cornerArcRadius)
     pos0 = nextPos0
     pathSegments.push(pathSegment)
   }
