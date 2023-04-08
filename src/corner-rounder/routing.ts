@@ -33,37 +33,45 @@ const getIntermediatePathSegment = (
   const BHalved = (pi - A) / 2
   const w = r * Math.tan(BHalved)
 
+  // Angle from x-axis of the first line
   const theta01 = Math.atan2(dy01, dx01)
+  // Angle from x-axis of the second line
   const theta12 = Math.atan2(dy12, dx12)
 
+  // -- Determine the walk-back and walk-forward points
   const x1wb = x1 - (w * Math.cos(theta01))
   const y1wb = y1 - (w * Math.sin(theta01))
-
   const x1wf = x1 + (w * Math.cos(theta12))
   const y1wf = y1 + (w * Math.sin(theta12))
 
+  // -- Determine the gradient of the two lines
   const m01 = dx01 !== 0 ? dy01 / dx01 : Infinity
   const m12 = dx12 !== 0 ? dy12 / dx12 : Infinity
 
   const line: Line = [pos0, [x1wb, y1wb]]
 
+  // If the gradients of the two lines are equal, then no arc is needed or possible.
   if (m01 === m12)
     return { pathSegment: { line }, nextPos0: pos1 }
 
   let xc = 0
   let yc = 0
+  // If the first line segment is perfectly horizontal
   if (m01 === 0) {
     xc = x1wb
     yc = (1 / m12) * (x1wf - x1wb) + y1wf
   }
+  // If the second line segment is perfectly horizontal
   else if (m12 === 0) {
     xc = x1wf
     yc = (1 / m01) * (x1wb - x1wf) + y1wb
   }
+  // If the first line segment is perfectly vertical
   else if (m01 === Infinity) {
     xc = x1wf + (m12 * (y1wf - y1wb))
     yc = y1wb
   }
+  // If the second line segment is perfectly vertical
   else if (m12 === Infinity) {
     xc = x1wb - (m01 * (y1wf - y1wb))
     yc = y1wf
@@ -73,7 +81,7 @@ const getIntermediatePathSegment = (
     yc = (1 / m12) * (x1wf - xc) + y1wf
   }
 
-  // We need to tell the SVG engine which arc to do depending on two things:
+  // We need to tell the SVG path engine which arc to draw depending on two things:
   // 1) If we are going clockwise or anti-clockwise
   // 2) If atan2 gives us an angle change of greater than 180 or less than -180
   const arcStartAngle = Math.atan2(y1wb - yc, x1wb - xc)
