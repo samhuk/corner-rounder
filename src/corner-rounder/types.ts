@@ -29,7 +29,7 @@ export type RoundCornersResult = {
   /**
    * Creates a list of SVG `<line>` and `<path>` (arc) elements that represents the rounded-corners route.
    */
-  toSvgLineAndArcs: (options: ToSvgLineAndArcsOptions) => (SVGLineElement | SVGPathElement)[]
+  toSvgLineAndArcs: (options?: ToSvgLineAndArcsOptions) => (SVGLineElement | SVGPathElement)[]
   /**
    * Creates elements that represents the route with rounded edges.
    */

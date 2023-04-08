@@ -1,11 +1,59 @@
 import React, { useEffect, useRef } from 'react'
-import exhibit, { simpleNumberSliderModifier } from 'exhibitor'
+import exhibit, { simpleNumberSliderModifier, simpleSelectModifier, simpleTextInputModifier } from 'exhibitor'
 import { Route } from '../corner-rounder/types'
 import { roundCorners } from '../corner-rounder'
+
+const QUADRANT_ROUTES: Route[] = [
+  // -- Clockwise
+  [
+    [0, 0],
+    [50, 0],
+    [50, 50],
+  ],
+  [
+    [50, 0],
+    [50, 50],
+    [0, 50],
+  ],
+  [
+    [50, 50],
+    [0, 50],
+    [0, 0],
+  ],
+  [
+    [0, 50],
+    [0, 0],
+    [50, 0],
+  ],
+  // -- Anti-clockwise
+  [
+    [50, 50],
+    [50, 0],
+    [0, 0],
+  ],
+  [
+    [0, 50],
+    [50, 50],
+    [50, 0],
+  ],
+  [
+    [0, 0],
+    [0, 50],
+    [50, 50],
+  ],
+  [
+    [50, 0],
+    [0, 0],
+    [0, 50],
+  ],
+]
 
 const Component = (props: {
   radius: number
   routes: Route[]
+  color: string
+  lineWidth: number
+  method: 'toSvgLineAndArcs' | 'toSvgPathDParameter'
 }) => {
   const elRef = useRef<HTMLDivElement>()
 
@@ -28,10 +76,27 @@ const Component = (props: {
       const extraX = ((i % 4) * gridSpacing) + padding
       const extraY = (Math.floor(i / 4) * gridSpacing) + padding
       const modifiedRoute: Route = route.map(pos => [pos[0] + extraX, pos[1] + extraY])
-      roundCorners({
-        route: modifiedRoute,
-        cornerArcRadius: props.radius,
-      }).toSvg().forEach(pathSvgEl => svgEl.appendChild(pathSvgEl))
+      if (props.method === 'toSvgLineAndArcs') {
+        roundCorners({
+          route: modifiedRoute,
+          cornerArcRadius: props.radius,
+        }).toSvgLineAndArcs({
+          color: props.color,
+          lineWidth: props.lineWidth,
+        }).forEach(svgLineOrArc => svgEl.appendChild(svgLineOrArc))
+      }
+      else if (props.method === 'toSvgPathDParameter') {
+        const pathDParameter = roundCorners({
+          route: modifiedRoute,
+          cornerArcRadius: props.radius,
+        }).toSvgPathDParameter()
+        const svgPathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        svgPathEl.setAttribute('d', pathDParameter)
+        svgPathEl.setAttribute('stroke-width', props.lineWidth.toString())
+        svgPathEl.setAttribute('stroke', props.color)
+        svgPathEl.setAttribute('fill', 'none')
+        svgEl.appendChild(svgPathEl)
+      }
     })
 
     el.appendChild(svgEl)
@@ -39,7 +104,7 @@ const Component = (props: {
     return () => {
       el.removeChild(svgEl)
     }
-  }, [elRef.current, props.radius, props.routes])
+  }, [elRef.current, props])
 
   return (
     <div className="cl-quadrants" ref={elRef} />
@@ -49,52 +114,15 @@ const Component = (props: {
 exhibit(Component, 'Quadrants')
   .defaults({
     radius: 10,
-    routes: [
-      // -- Clockwise
-      [
-        [0, 0],
-        [50, 0],
-        [50, 50],
-      ],
-      [
-        [50, 0],
-        [50, 50],
-        [0, 50],
-      ],
-      [
-        [50, 50],
-        [0, 50],
-        [0, 0],
-      ],
-      [
-        [0, 50],
-        [0, 0],
-        [50, 0],
-      ],
-      // -- Anti-clockwise
-      [
-        [50, 50],
-        [50, 0],
-        [0, 0],
-      ],
-      [
-        [0, 50],
-        [50, 50],
-        [50, 0],
-      ],
-      [
-        [0, 0],
-        [0, 50],
-        [50, 50],
-      ],
-      [
-        [50, 0],
-        [0, 0],
-        [0, 50],
-      ],
-    ],
+    routes: QUADRANT_ROUTES,
+    color: 'white',
+    lineWidth: 2,
+    method: 'toSvgLineAndArcs',
   })
   .propModifiers([
     simpleNumberSliderModifier('radius', { min: 0, max: 100, step: 1 }),
+    simpleNumberSliderModifier('lineWidth', { min: 1, max: 20, step: 1 }),
+    simpleTextInputModifier('color'),
+    simpleSelectModifier('method', ['toSvgLineAndArcs', 'toSvgPathDParameter']),
   ])
   .build()

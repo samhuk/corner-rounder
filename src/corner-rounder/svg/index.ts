@@ -10,14 +10,15 @@ const applyToSvgLineAndArcsOptionsToSvgEl = (svgEl: SVGElement, options: ToSvgLi
 
 const createSvgLineEl = (
   line: Line,
-  options: ToSvgLineAndArcsOptions,
+  options: ToSvgLineAndArcsOptions | undefined | null,
 ): SVGLineElement => {
   const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'line')
   lineEl.setAttribute('x1', line[0][0].toString())
   lineEl.setAttribute('y1', line[0][1].toString())
   lineEl.setAttribute('x2', line[1][0].toString())
   lineEl.setAttribute('y2', line[1][1].toString())
-  applyToSvgLineAndArcsOptionsToSvgEl(lineEl, options)
+  if (options != null)
+    applyToSvgLineAndArcsOptionsToSvgEl(lineEl, options)
   return lineEl
 }
 
@@ -26,23 +27,24 @@ const createSvgArcEl = (
   tgtPos: Position2D,
   r: number,
   sweepFlag: boolean,
-  options: ToSvgLineAndArcsOptions,
+  options: ToSvgLineAndArcsOptions | undefined | null,
 ): SVGPathElement => {
   const arcEl = document.createElementNS('http://www.w3.org/2000/svg', 'path')
   arcEl.setAttribute('d', `M ${srcPos[0]} ${srcPos[1]} A ${r} ${r} 0 0 ${sweepFlag ? '1' : '0'} ${tgtPos[0]} ${tgtPos[1]}`)
   arcEl.setAttribute('fill', 'none')
-  applyToSvgLineAndArcsOptionsToSvgEl(arcEl, options)
+  if (options != null)
+    applyToSvgLineAndArcsOptionsToSvgEl(arcEl, options)
   return arcEl
 }
 
-export const toSvgElParams = (pathSegments: PathSegment[]) => {
+export const toSvgLineAndArcParams = (pathSegments: PathSegment[]) => {
 
 }
 
 export const toSvgLineAndArcs = (
   pathSegments: PathSegment[],
   cornerArcRadius: number,
-  options: ToSvgLineAndArcsOptions,
+  options: ToSvgLineAndArcsOptions | undefined | null,
 ): (SVGLineElement | SVGPathElement)[] => {
   const els: (SVGLineElement | SVGPathElement)[] = []
   pathSegments.forEach((ps, i) => {
