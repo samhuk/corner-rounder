@@ -1,4 +1,4 @@
-import { ToSvgElsOptions } from './svg/types'
+import { ToSvgLineAndArcsOptions } from './svg/types'
 
 /**
  * Represents a 2-dimensional coordinate, i.e `[x, y]`
@@ -27,9 +27,9 @@ export type RoundCornersResult = {
    */
   pathSegments: PathSegment[]
   /**
-   * Creates a list of SVG `<line>` and `<path>` elements that represents the rounded-corners route.
+   * Creates a list of SVG `<line>` and `<path>` (arc) elements that represents the rounded-corners route.
    */
-  toSvgLineAndArcs: (options: ToSvgElsOptions) => SVGElement[]
+  toSvgLineAndArcs: (options: ToSvgLineAndArcsOptions) => (SVGLineElement | SVGPathElement)[]
   /**
    * Creates elements that represents the route with rounded edges.
    */

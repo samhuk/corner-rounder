@@ -1,4 +1,4 @@
-export type ToSvgElsOptions = {
+export type ToSvgLineAndArcsOptions = {
   /**
    * The color used to draw the rounded-edge route.
    *

@@ -1,7 +1,7 @@
 import { Line, PathSegment, Position2D } from '../types'
-import { ToSvgElsOptions } from './types'
+import { ToSvgLineAndArcsOptions } from './types'
 
-const applyToSvgElsOptionsToSvgEl = (svgEl: SVGElement, options: ToSvgElsOptions): void => {
+const applyToSvgLineAndArcsOptionsToSvgEl = (svgEl: SVGElement, options: ToSvgLineAndArcsOptions): void => {
   if (options.color != null)
     svgEl.setAttribute('stroke', options.color)
   if (options.lineWidth != null)
@@ -10,14 +10,14 @@ const applyToSvgElsOptionsToSvgEl = (svgEl: SVGElement, options: ToSvgElsOptions
 
 const createSvgLineEl = (
   line: Line,
-  options: ToSvgElsOptions,
-) => {
+  options: ToSvgLineAndArcsOptions,
+): SVGLineElement => {
   const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'line')
   lineEl.setAttribute('x1', line[0][0].toString())
   lineEl.setAttribute('y1', line[0][1].toString())
   lineEl.setAttribute('x2', line[1][0].toString())
   lineEl.setAttribute('y2', line[1][1].toString())
-  applyToSvgElsOptionsToSvgEl(lineEl, options)
+  applyToSvgLineAndArcsOptionsToSvgEl(lineEl, options)
   return lineEl
 }
 
@@ -26,12 +26,12 @@ const createSvgArcEl = (
   tgtPos: Position2D,
   r: number,
   sweepFlag: boolean,
-  options: ToSvgElsOptions,
-): SVGElement => {
+  options: ToSvgLineAndArcsOptions,
+): SVGPathElement => {
   const arcEl = document.createElementNS('http://www.w3.org/2000/svg', 'path')
   arcEl.setAttribute('d', `M ${srcPos[0]} ${srcPos[1]} A ${r} ${r} 0 0 ${sweepFlag ? '1' : '0'} ${tgtPos[0]} ${tgtPos[1]}`)
   arcEl.setAttribute('fill', 'none')
-  applyToSvgElsOptionsToSvgEl(arcEl, options)
+  applyToSvgLineAndArcsOptionsToSvgEl(arcEl, options)
   return arcEl
 }
 
@@ -39,12 +39,12 @@ export const toSvgElParams = (pathSegments: PathSegment[]) => {
 
 }
 
-export const toSvgEls = (
+export const toSvgLineAndArcs = (
   pathSegments: PathSegment[],
   cornerArcRadius: number,
-  options: ToSvgElsOptions,
-): SVGElement[] => {
-  const els: SVGElement[] = []
+  options: ToSvgLineAndArcsOptions,
+): (SVGLineElement | SVGPathElement)[] => {
+  const els: (SVGLineElement | SVGPathElement)[] = []
   pathSegments.forEach((ps, i) => {
     els.push(createSvgLineEl(ps.line, options))
     if (ps.arc != null)
