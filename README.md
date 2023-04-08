@@ -15,14 +15,14 @@
 
 ## Overview
 
-Corner Rounder rounds the corners for a list of 2D coordinates that represents a path. It provides the option to convert the result to SVG path commands.
+Corner Rounder rounds the corners of a path (or "route") of points. It provides the option to convert the result to SVG elements or SVG path commands.
 
 ## Usage Overview
 
 ```typescript
 import roundCorners from 'corner-rounder'
 
-const roundCornersResult = roundCorners({
+const result = roundCorners({
   // Simple "L"-shape route
   route: [
     [0, 0],
@@ -32,7 +32,10 @@ const roundCornersResult = roundCorners({
   cornerArcRadius: 10,
 })
 
-const 
+// E.g. "M 0 0 L 0 40 A 10 10 0 0 0 10 50 L 50 50"
+const d = result.toSvgPathDParameter()
+// E.g. (SVGLineElement | SVGPathElement)[]
+const svgLineAndArcElements = result.toSvgLineAndArcs()
 ```
 
 The result of this, rendering with SVG, looks something like this:
