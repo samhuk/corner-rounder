@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import exhibit, { simpleNumberSliderModifier, simpleSelectModifier, simpleTextInputModifier } from 'exhibitor'
-import { Route } from '../corner-rounder/types'
+import { OverRadiusHandling, Route } from '../corner-rounder/types'
 import { roundCorners } from '../corner-rounder'
 
 const QUADRANT_ROUTES: Route[] = [
@@ -53,7 +53,8 @@ const Component = (props: {
   routes: Route[]
   color: string
   lineWidth: number
-  method: 'toSvgLineAndArcs' | 'toSvgPathDParameter'
+  method: 'toSvgLinesAndArcs' | 'toSvgPathDParameter'
+  overRadiusHandling: OverRadiusHandling
 }) => {
   const elRef = useRef<HTMLDivElement>()
 
@@ -76,11 +77,12 @@ const Component = (props: {
       const extraX = ((i % 4) * gridSpacing) + padding
       const extraY = (Math.floor(i / 4) * gridSpacing) + padding
       const modifiedRoute: Route = route.map(pos => [pos[0] + extraX, pos[1] + extraY])
-      if (props.method === 'toSvgLineAndArcs') {
+      if (props.method === 'toSvgLinesAndArcs') {
         roundCorners({
           route: modifiedRoute,
-          cornerArcRadius: props.radius,
-        }).toSvgLineAndArcs({
+          r: props.radius,
+          overRadiusHandling: props.overRadiusHandling,
+        }).toSvgLinesAndArcs({
           color: props.color,
           lineWidth: props.lineWidth,
         }).forEach(svgLineOrArc => svgEl.appendChild(svgLineOrArc))
@@ -88,7 +90,7 @@ const Component = (props: {
       else if (props.method === 'toSvgPathDParameter') {
         const pathDParameter = roundCorners({
           route: modifiedRoute,
-          cornerArcRadius: props.radius,
+          r: props.radius,
         }).toSvgPathDParameter()
         const svgPathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path')
         svgPathEl.setAttribute('d', pathDParameter)
@@ -117,12 +119,14 @@ exhibit(Component, 'Quadrants')
     routes: QUADRANT_ROUTES,
     color: 'white',
     lineWidth: 2,
-    method: 'toSvgLineAndArcs',
+    method: 'toSvgLinesAndArcs',
+    overRadiusHandling: 'radiusSacrifice',
   })
   .propModifiers([
     simpleNumberSliderModifier('radius', { min: 0, max: 100, step: 1 }),
     simpleNumberSliderModifier('lineWidth', { min: 1, max: 20, step: 1 }),
     simpleTextInputModifier('color'),
-    simpleSelectModifier('method', ['toSvgLineAndArcs', 'toSvgPathDParameter']),
+    simpleSelectModifier('method', ['toSvgLinesAndArcs', 'toSvgPathDParameter']),
+    simpleSelectModifier('overRadiusHandling', ['radiusSacrifice', 'continuitySacrifice']),
   ])
   .build()

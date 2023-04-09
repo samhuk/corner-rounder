@@ -31,8 +31,8 @@ const Component = (props: {
 
     roundCorners({
       route: modifiedRoute,
-      cornerArcRadius: props.radius,
-    }).toSvgLineAndArcs({
+      r: props.radius,
+    }).toSvgLinesAndArcs({
       color: props.color,
       lineWidth: props.lineWidth,
     }).forEach(pathSvgEl => svgEl.appendChild(pathSvgEl))

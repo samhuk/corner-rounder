@@ -1,4 +1,4 @@
-import { ToSvgLineAndArcsOptions } from './svg/types'
+import { ToSvgLinesAndArcsOptions } from './svg/types'
 
 /**
  * Represents a 2D coordinate, i.e `[x, y]`
@@ -15,6 +15,8 @@ export type Line = [src: Position2D, dest: Position2D]
  */
 export type Route = Position2D[]
 
+export type OverRadiusHandling = 'radiusSacrifice' | 'continuitySacrifice'
+
 export type RoundCornersOptions = {
   /**
    * The list of 2D coordinates that represents the path with corners that
@@ -24,12 +26,27 @@ export type RoundCornersOptions = {
   /**
    * The radius of the arc used to round the corners of the given route.
    */
-  cornerArcRadius: number
+  r: number
+  /**
+   * Determines what happens when the radius is too large for a particular corner. This happens
+   * when a particular corner is too acute ("tight") and an arc with the configured radius
+   * does not "fit" into the corner.
+   *
+   * There are two modes, which determine what is sacrificed:
+   * * **radiusSacrifice**: The radius of the arc is decreased such that the arc fits.
+   * * **continuitySacrifice**: The radius of the arc is maintained at the configured radius,
+   * causing the arc to not join the two lines that form the corner at 180 degrees (forming
+   * a discontinuity).
+   *
+   * @default 'radiusSacrifice'
+   */
+  overRadiusHandling?: OverRadiusHandling
 }
 
 export type PathSegment = {
   line: Line
   arc?: {
+    r?: number
     sweepFlag: boolean
   }
 }
@@ -47,14 +64,14 @@ export type RoundCornersResult = {
    *
    * const result = roundCorners({
    *   route: [...],
-   *   cornerArcRadius: 5,
+   *   r: 5,
    * })
    *
-   * const routeEls = result.toSvgLineAndArcs({ color: 'orange', ... })
+   * const routeEls = result.toSvgLinesAndArcs({ color: 'orange', ... })
    * const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
    * routeEls.forEach(el => svgEl.appendChild(el))
    */
-  toSvgLineAndArcs: (options?: ToSvgLineAndArcsOptions) => (SVGLineElement | SVGPathElement)[]
+  toSvgLinesAndArcs: (options?: ToSvgLinesAndArcsOptions) => (SVGLineElement | SVGPathElement)[]
   /**
    * Creates the SVG `<path>` element `d` parameter required to represent the rounded-corners route.
    *
@@ -63,7 +80,7 @@ export type RoundCornersResult = {
    *
    * const result = roundCorners({
    *   route: [...],
-   *   cornerArcRadius: 5,
+   *   r: 5,
    * })
    *
    * const d = result.toSvgPathDParameter() // E.g. "M 0 0 L 0 40 A 10 10 0 0 0 10 50 L 50 50"

@@ -5,17 +5,17 @@ describe('corner-rounder', () => {
     const fn = roundCorners
 
     test('empty route (invalid)', () => {
-      const result = fn({ route: [], cornerArcRadius: 10 })
+      const result = fn({ route: [], r: 10 })
       expect(result.pathSegments).toEqual([])
     })
 
     test('one-point route (invalid)', () => {
-      const result = fn({ route: [[0, 0]], cornerArcRadius: 10 })
+      const result = fn({ route: [[0, 0]], r: 10 })
       expect(result.pathSegments).toEqual([])
     })
 
     test('two-point route (just a straight line)', () => {
-      const result = fn({ route: [[0, 0], [50, 50]], cornerArcRadius: 10 })
+      const result = fn({ route: [[0, 0], [50, 50]], r: 10 })
       expect(result.pathSegments).toEqual([
         {
           line: [
@@ -27,10 +27,11 @@ describe('corner-rounder', () => {
     })
 
     test('multiple-point route', () => {
-      const result = fn({ route: [[0, 0], [50, 50], [100, 50], [150, 25]], cornerArcRadius: 10 })
+      const result = fn({ route: [[0, 0], [50, 50], [100, 50], [150, 25]], r: 10 })
       expect(result.pathSegments).toEqual([
         {
           arc: {
+            r: 10,
             sweepFlag: false,
           },
           line: [
@@ -40,6 +41,7 @@ describe('corner-rounder', () => {
         },
         {
           arc: {
+            r: 10.000000000000002,
             sweepFlag: false,
           },
           line: [

@@ -11,7 +11,7 @@ describe('corner-rounder/svg', () => {
         [0, 0],
         [0, 50],
         [50, 50],
-      ], 10)
+      ], 10, 'radiusSacrifice')
 
       const result = fn(pathSegments, 10)
 

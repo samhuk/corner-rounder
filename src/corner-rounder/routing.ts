@@ -1,10 +1,11 @@
-import { Line, PathSegment, Position2D, Route } from './types'
+import { Line, OverRadiusHandling, PathSegment, Position2D, Route } from './types'
 
 const getIntermediatePathSegment = (
   pos0: Position2D,
   pos1: Position2D,
   pos2: Position2D,
   r: number,
+  overRadiusHandling: OverRadiusHandling,
 ): { pathSegment: PathSegment, nextPos0: Position2D } => {
   const pi = Math.PI
   const x0 = pos0[0]
@@ -30,7 +31,9 @@ const getIntermediatePathSegment = (
   // Key results
   const A = Math.acos((d01 ** 2 + d12 ** 2 - d02 ** 2) / (2 * d01 * d12))
   const BHalved = (pi - A) / 2
-  const w = r * Math.tan(BHalved)
+  const wUnlimited = r * Math.tan(BHalved)
+  const w = Math.min(wUnlimited, d01, d12)
+  const rLimited = overRadiusHandling === 'continuitySacrifice' ? r : w / Math.tan(BHalved)
 
   // Angle from x-axis of each line
   const theta01 = Math.atan2(dy01, dx01)
@@ -99,12 +102,12 @@ const getIntermediatePathSegment = (
   const sweepFlag = arcAngleChange > 0
 
   return {
-    pathSegment: { line, arc: { sweepFlag } },
+    pathSegment: { line, arc: { sweepFlag, r: rLimited } },
     nextPos0: [x1wf, y1wf],
   }
 }
 
-export const determinePathSegments = (route: Route, cornerArcRadius: number): PathSegment[] => {
+export const determinePathSegments = (route: Route, r: number, overRadiusHandling: OverRadiusHandling): PathSegment[] => {
   // Cannot have a route with less than 2 points
   if (route.length < 2)
     return []
@@ -121,7 +124,7 @@ export const determinePathSegments = (route: Route, cornerArcRadius: number): Pa
   let pos0: Position2D = route[0]
 
   for (let i = 0; i < lenMinusTwo; i += 1) {
-    const { pathSegment, nextPos0 } = getIntermediatePathSegment(pos0, route[i + 1], route[i + 2], cornerArcRadius)
+    const { pathSegment, nextPos0 } = getIntermediatePathSegment(pos0, route[i + 1], route[i + 2], r, overRadiusHandling)
     pos0 = nextPos0
     pathSegments.push(pathSegment)
   }
