@@ -1,6 +1,6 @@
 {
   "name": "corner-rounder",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Corner rounder with SVG support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
