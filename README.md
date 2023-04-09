@@ -19,6 +19,8 @@ Corner Rounder rounds the corners of a path (or "route") of points. It provides 
 
 ## Usage Overview
 
+`npm i -S corner-rounder`
+
 ```typescript
 import roundCorners from 'corner-rounder'
 
